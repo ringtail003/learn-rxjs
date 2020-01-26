@@ -40,6 +40,11 @@ export const fakeResponses: FakeResponse[] = [
     delay: 2000,
   },
   {
+    id: 'error',
+    name: 'ERROR',
+    delay: 1000,
+  },
+  {
     id: 'b',
     name: 'B',
     delay: 4000,
@@ -49,9 +54,11 @@ export const fakeResponses: FakeResponse[] = [
     name: 'C',
     delay: 0,
   },
-  {
-    id: 'error',
-    name: 'ERROR',
-    delay: 1000,
-  },
 ];
+
+export function responses(args: { willError: boolean }) {
+  return fakeResponses
+    .filter((response) => args.willError || response.id !== 'error')
+    .map((response) => response.id)
+  ;
+}

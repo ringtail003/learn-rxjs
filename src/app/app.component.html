@@ -1,7 +1,4 @@
-<button (click)="mergeMap()">mergeMap</button>
-<button (click)="mergeMapWithContinue()">with error (continue)</button>
-<button (click)="mergeMapWithSubscribe()">with error (subscribe)</button>
-<button (click)="mergeMapWithAbort()">with error (abort)</button>
+<h2>Fake responses</h2>
 
 <div>
   <label>Fake responses</label>
@@ -13,12 +10,7 @@
   </ul>
 </div>
 
-<div>
-  <label>Subscribed</label>
-  <ul>
-    <li *ngFor="let response of responses">
-      <span class="value">{{response.name}}</span>
-      <span class="delay">delay {{response.delay}}</span>
-    </li>
-  </ul>
-</div>
+<merge-map></merge-map>
+<concat-map></concat-map>
+<switch-map></switch-map>
+<fork-join></fork-join>

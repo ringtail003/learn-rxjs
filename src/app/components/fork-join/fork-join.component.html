@@ -1,0 +1,16 @@
+<h2>forkJoin</h2>
+
+<button (click)="call()">call</button>
+<button (click)="withContinue()">with error (continue)</button>
+<button (click)="withSubscribe()">with error (subscribe)</button>
+<button (click)="withAbort()">with error (abort)</button>
+
+<div>
+  <label>Subscribed</label>
+  <ul>
+    <li *ngFor="let response of responses">
+      <span class="value">{{response.name}}</span>
+      <span class="delay">delay {{response.delay}}</span>
+    </li>
+  </ul>
+</div>
