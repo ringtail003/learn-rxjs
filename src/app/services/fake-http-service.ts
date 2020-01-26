@@ -6,20 +6,14 @@ import { delay, mergeMap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class FakeHttpService {
-  get(id: string): Observable<ResponseValue> {
+  get(id: string): Observable<FakeResponse> {
     console.log(`get('${id}') called.`);
 
     const value = this.find(id);
 
-    if (!value) {
-      const error: ResponseValue = {
-        id,
-        name: 'ERROR',
-        delay: 3000,
-      };
-
-      return timer(error.delay).pipe(
-        mergeMap(() => throwError(error)),
+    if (value.id === 'error') {
+      return timer(value.delay).pipe(
+        mergeMap(() => throwError(value)),
       );
     }
 
@@ -28,18 +22,18 @@ export class FakeHttpService {
     );
   }
 
-  find(id: string): ResponseValue {
-    return fakeValues.find((value) => value.id === id);
+  find(id: string): FakeResponse {
+    return fakeResponses.find((value) => value.id === id);
   }
 }
 
-export interface ResponseValue {
+export interface FakeResponse {
   id: string,
   name: string;
   delay: number,
 }
 
-const fakeValues: ResponseValue[] = [
+export const fakeResponses: FakeResponse[] = [
   {
     id: 'a',
     name: 'A',
@@ -54,5 +48,10 @@ const fakeValues: ResponseValue[] = [
     id: 'c',
     name: 'C',
     delay: 0,
+  },
+  {
+    id: 'error',
+    name: 'ERROR',
+    delay: 1000,
   },
 ];

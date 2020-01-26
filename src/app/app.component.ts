@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FakeHttpService, ResponseValue } from './services/fake-http-service';
+import { FakeHttpService, FakeResponse, fakeResponses } from './services/fake-http-service';
 import { mergeMap, catchError } from 'rxjs/operators';
 import { from, of, EMPTY, throwError } from 'rxjs';
 
@@ -9,7 +9,8 @@ import { from, of, EMPTY, throwError } from 'rxjs';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  values: any[] = [];
+  list = fakeResponses.sort((a, b) => a.delay - b.delay);
+  responses: any[] = [];
 
   constructor(
     private fakeHttpService: FakeHttpService,
@@ -17,32 +18,54 @@ export class AppComponent {
   }
 
   mergeMap() {
-    this.values = [];
+    this.responses = [];
 
     from(['a', 'b', 'c']).pipe(
         mergeMap((id) => this.fakeHttpService.get(id)),
       )
-      .subscribe((value) => this.values.push(value))
+      .subscribe((value) => this.responses.push(value))
     ;
   }
 
-  mergeMapWithError() {
-    this.values = [];
+  mergeMapWithContinue() {
+    this.responses = [];
 
-    from(['a', 'b', 'error', 'c']).pipe(
+    from(['error', 'a', 'b', 'c']).pipe(
         mergeMap((id) => this.fakeHttpService.get(id).pipe(
-          // catchError((error: ResponseValue) => of(error)),
-          // catchError(() => EMPTY),
-          // catchError(() => of()),
-          catchError((error) => {
-            console.log(error);
-            // return EMPTY;
-            // return of(error);
-            return throwError('hoge');
+          catchError((error: FakeResponse) => {
+            return EMPTY;
           }),
         )),
       )
-      .subscribe((value) => this.values.push(value))
+      .subscribe((value) => this.responses.push(value))
+    ;
+  }
+
+  mergeMapWithSubscribe() {
+    this.responses = [];
+
+    from(['error', 'a', 'b', 'c']).pipe(
+        mergeMap((id) => this.fakeHttpService.get(id).pipe(
+          catchError((error: FakeResponse) => {
+            return of(error);
+          }),
+        )),
+      )
+      .subscribe((value) => this.responses.push(value))
+    ;
+  }
+
+  mergeMapWithAbort() {
+    this.responses = [];
+
+    from(['error', 'a', 'b', 'c']).pipe(
+        mergeMap((id) => this.fakeHttpService.get(id).pipe(
+          catchError((error: FakeResponse) => {
+            return throwError('abort');
+          }),
+        )),
+      )
+      .subscribe((value) => this.responses.push(value))
     ;
   }
 }

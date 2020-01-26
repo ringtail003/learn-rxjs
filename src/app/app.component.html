@@ -1,9 +1,24 @@
 <button (click)="mergeMap()">mergeMap</button>
-<button (click)="mergeMapWithError()">mergeMap with error</button>
+<button (click)="mergeMapWithContinue()">with error (continue)</button>
+<button (click)="mergeMapWithSubscribe()">with error (subscribe)</button>
+<button (click)="mergeMapWithAbort()">with error (abort)</button>
 
-<ul>
-  <li *ngFor="let value of values">
-    <span class="value">{{value.name}}</span>
-    <span class="delay">delay {{value.delay}}</span>
-  </li>
-</ul>
+<div>
+  <label>Fake responses</label>
+  <ul>
+    <li *ngFor="let value of list">
+      <span class="value">{{value.name}}</span>
+      <span class="delay">delay {{value.delay}}</span>
+    </li>
+  </ul>
+</div>
+
+<div>
+  <label>Subscribed</label>
+  <ul>
+    <li *ngFor="let response of responses">
+      <span class="value">{{response.name}}</span>
+      <span class="delay">delay {{response.delay}}</span>
+    </li>
+  </ul>
+</div>
